@@ -1,9 +1,9 @@
 use json::*;
 
 pub struct Index {
-    title: String,
-    m3u8: String,
-    tsa: Vec<String>,
+    pub title: String,
+    pub m3u8: String,
+    pub tsa: Vec<String>,
 }
 
 pub fn new(inp: &str) -> Result<Index> {

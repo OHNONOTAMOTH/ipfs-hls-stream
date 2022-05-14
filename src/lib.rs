@@ -4,13 +4,16 @@ use futures_util::stream::*;
 pub mod addresses;
 
 #[tokio::main]
-pub async fn get(hash: &str) -> Result<Vec<u8>, Error> {
+pub async fn get(hash: &str) -> Result<addresses::Index, Error> {
     let client = ipfs_api::IpfsClient::default();
 
-    let gotten = client.cat(hash).map_ok(|chunk| chunk.to_vec()).try_concat().await.unwrap();
+    let indextextjson = String::from_utf8(client.cat(hash).map_ok(|chunk| chunk.to_vec()).try_concat().await.unwrap()).unwrap();
 
-    Ok(gotten)
+    let index = addresses::new(&indextextjson).unwrap();
+    Ok(index)
 }
+
+
 
 #[cfg(test)]
 mod tests {
@@ -18,6 +21,6 @@ mod tests {
 
     #[test]
     fn ipfscontest() {
-        println!("{:?}", String::from_utf8(get("QmRf22bZar3WKmojipms22PkXH1MZGmvsqzQtuSvQE3uhm").unwrap()).unwrap());
+        println!("{:?}", get("QmcjtoGz23nxNvEE6gEzNEUwGMMYWknCgPCPHanpjNtHzv").unwrap().title);
     }
 }
